@@ -12,11 +12,11 @@ var uglify = require('gulp-uglify');
 gulp.task('jsConcat', function() {
     return gulp.src('src/**/*.js')
       .pipe(concat('heatmap.min.js'))
-      .pipe(uglify())
+    //   .pipe(uglify())
       .pipe(gulp.dest('build'));
 });
 
 
 gulp.task('watch_src', function() {
-    gulp.watch('**/*.*', ['t1']);
+    gulp.watch('src/**/*.js', ['jsConcat']);
 });
