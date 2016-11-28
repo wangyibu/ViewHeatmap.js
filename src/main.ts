@@ -27,6 +27,7 @@ namespace wd3 {
         public plus: any;
         public minus: any;
         public heatmapContainer: HTMLElement;
+        private positionData: IData[];
 
 
         init() {
@@ -43,9 +44,10 @@ namespace wd3 {
 
         constructor(private tankClassName: string,
             screenshotUrl: string,
-            private positionData: IData[],
+            positionData: IData[],
             opts: opts = { screenshotAlpha: 0.6, heatmapAlpha: 0.6, colorScheme: 'simple' }) {
             this.init();
+            this.positionData = positionData;
             this.screenshotOpacity = opts.screenshotAlpha;
             this.heatmapOpacity = opts.heatmapAlpha;
             this.calculateColor = opts.colorScheme == 'simple' ? this.fiveColorGradient : this.simpleRedGradient;
@@ -73,7 +75,7 @@ namespace wd3 {
             // 创建高度数组
             var data, i, maxViews, position, value, views, viewsArray,
                 _i, _j, _k, _l, _len, _len1, _m, _n,
-                _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _results1, _results2;
+                _ref, _ref2, _ref3, _ref4, _ref5;
 
             function createHeightPixelArray() {
                 var _results = [];
@@ -88,7 +90,8 @@ namespace wd3 {
             this.minus = createHeightPixelArray.call(this).map(function () {
                 return 0;
             })
-            for (_k = 0; _k < this.positionData.length; _k++) {
+            _ref2 = this.positionData;
+            for (_k = 0, _len = _ref2.length; _k < _len; _k++) {
                 data = this.positionData[_k];
                 _ref3 = data.positions;
                 for (_l = 0, _len1 = _ref3.length; _l < _len1; _l++) {
@@ -107,18 +110,18 @@ namespace wd3 {
                 maxViews = Math.max(maxViews, views);
             }
             this.context.globalAlpha = 1.0;
-            _results2 = [];
-            for (i = _n = 0,
-                _ref5 = this.background.height; 0 <= _ref5 ? _n <= _ref5 : _n >= _ref5; i = 0 <= _ref5 ? ++_n : --_n) {
+            for (i = _n = 0, _ref5 = this.background.height; 0 <= _ref5 ? _n <= _ref5 : _n >= _ref5; i = 0 <= _ref5 ? ++_n : --_n) {
                 value = viewsArray[i] / maxViews;
                 this.context.beginPath();
                 this.context.moveTo(0, i);
                 this.context.lineTo(this.background.width, i);
                 this.context.lineWidth = 1;
                 this.context.strokeStyle = this.calculateColor(value);
-                _results2.push(this.context.stroke());
+                this.context.stroke();
             }
-            return _results2;
+            console.log(viewsArray);
+            console.log(maxViews);
+            console.log(views);
         }
 
 
