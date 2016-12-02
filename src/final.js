@@ -1,7 +1,13 @@
 var wd3;
 (function (wd3) {
-    var HeatmapOld = (function () {
-        function HeatmapOld(tankClassName, screenshotUrl, positionData, opts) {
+    (function (EPixel) {
+        EPixel[EPixel["rowPx"] = 0] = "rowPx";
+        EPixel[EPixel["times"] = 1] = "times";
+        EPixel[EPixel["timeInterval"] = 2] = "timeInterval";
+    })(wd3.EPixel || (wd3.EPixel = {}));
+    var EPixel = wd3.EPixel;
+    var Heatmap = (function () {
+        function Heatmap(tankClassName, screenshotUrl, positionData, opts) {
             var _this = this;
             if (opts === void 0) { opts = { screenshotAlpha: 0.6, heatmapAlpha: 0.6, colorScheme: 'simple' }; }
             this.tankClassName = tankClassName;
@@ -27,7 +33,7 @@ var wd3;
                 console.log('image error');
             };
         }
-        HeatmapOld.prototype.init = function () {
+        Heatmap.prototype.init = function () {
             this.canvas = document.createElement("canvas");
             this.context = this.canvas.getContext('2d');
             this.context.globalAlpha = this.screenshotOpacity;
@@ -38,44 +44,39 @@ var wd3;
             this.heatmapContainer.appendChild(this.canvas);
         };
         // 
-        HeatmapOld.prototype.compute = function () {
-            // 创建高度数组
-            var data, i, maxViews, position, value, views, viewsArray, _i, _j, _k, _l, _len, _len1, _m, _n, _ref, _ref2, _ref3, _ref4, _ref5;
-            function createHeightPixelArray() {
-                var _results = [];
-                for (var _i = 0, _ref = this.background.height; 0 <= _ref ? _i <= _ref : _i >= _ref; 0 <= _ref ? _i++ : _i--) {
-                    _results.push(_i);
+        Heatmap.prototype.compute = function () {
+            // // 创建高度数组
+            // var data, i, maxViews, position, value, views, viewsArray,
+            //     _i, _j, _k, _l, _len, _len1, _m, _n,
+            //     _ref, _ref2, _ref3, _ref4, _ref5;
+            // views = 0;
+            // maxViews = 0;
+            // viewsArray = [];
+            // for (i = _m = 0, _ref4 = this.positionData[this.positionData.length - 1][EPixel.rowPx]; 0 <= _ref4 ? _m <= _ref4 : _m >= _ref4; i = 0 <= _ref4 ? ++_m : --_m) {
+            //     views += this.plus[i];
+            //     views -= this.minus[i];
+            //     viewsArray[i] = views;
+            //     maxViews = Math.max(maxViews, views);
+            // }
+            // this.context.globalAlpha = 1.0;
+            // for (i = _n = 0, _ref5 = this.background.height; 0 <= _ref5 ? _n <= _ref5 : _n >= _ref5; i = 0 <= _ref5 ? ++_n : --_n) {
+            // value = viewsArray[i] / maxViews;
+            var maxHeight = 0;
+            var maxTimes = 0;
+            var maxTimeIntervale = 0;
+            this.positionData.forEach(function (value, index) {
+                if (maxHeight < value[EPixel.rowPx]) {
+                    maxHeight = value[EPixel.rowPx];
                 }
-                return _results;
-            }
-            this.plus = createHeightPixelArray.call(this).map(function () {
-                return 0;
-            });
-            this.minus = createHeightPixelArray.call(this).map(function () {
-                return 0;
-            });
-            _ref2 = this.positionData;
-            for (_k = 0, _len = _ref2.length; _k < _len; _k++) {
-                data = this.positionData[_k];
-                _ref3 = data.positions;
-                for (_l = 0, _len1 = _ref3.length; _l < _len1; _l++) {
-                    position = _ref3[_l];
-                    ++this.plus[position];
-                    ++this.minus[position + data.height];
+                if (maxTimes < value[EPixel.times]) {
+                    maxTimes = value[EPixel.times];
                 }
-            }
-            views = 0;
-            maxViews = 0;
-            viewsArray = [];
-            for (i = _m = 0, _ref4 = this.background.height; 0 <= _ref4 ? _m <= _ref4 : _m >= _ref4; i = 0 <= _ref4 ? ++_m : --_m) {
-                views += this.plus[i];
-                views -= this.minus[i];
-                viewsArray[i] = views;
-                maxViews = Math.max(maxViews, views);
-            }
-            this.context.globalAlpha = 1.0;
-            for (i = _n = 0, _ref5 = this.background.height; 0 <= _ref5 ? _n <= _ref5 : _n >= _ref5; i = 0 <= _ref5 ? ++_n : --_n) {
-                value = viewsArray[i] / maxViews;
+                if (maxTimeIntervale < value[EPixel.timeInterval]) {
+                    maxTimeIntervale = value[EPixel.timeInterval];
+                }
+            });
+            for (var i = 0; i < maxHeight; i++) {
+                var value = this.positionData[i][EPixel.times] / maxTimes;
                 this.context.beginPath();
                 this.context.moveTo(0, i);
                 this.context.lineTo(this.background.width, i);
@@ -83,19 +84,20 @@ var wd3;
                 this.context.strokeStyle = this.calculateColor(value);
                 this.context.stroke();
             }
-            console.log(viewsArray);
-            console.log(maxViews);
-            console.log(views);
+            // }
+            // console.log(viewsArray);
+            // console.log(maxViews);
+            // console.log(views);
         };
-        HeatmapOld.prototype.fiveColorGradient = function (value) {
+        Heatmap.prototype.fiveColorGradient = function (value) {
             var h;
             h = (1.0 - value) * 240;
             return "hsla(" + h + ",100%,50%," + this.heatmapOpacity + ")";
         };
-        HeatmapOld.prototype.simpleRedGradient = function (value) {
+        Heatmap.prototype.simpleRedGradient = function (value) {
             return "rgba(255,0,0," + value * this.heatmapOpacity + ")";
         };
-        return HeatmapOld;
+        return Heatmap;
     }());
-    wd3.HeatmapOld = HeatmapOld;
+    wd3.Heatmap = Heatmap;
 })(wd3 || (wd3 = {}));

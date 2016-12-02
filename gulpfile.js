@@ -10,10 +10,10 @@ var uglify = require('gulp-uglify');
 // });
 
 gulp.task('jsConcat', function() {
-    return gulp.src('src/**/*.js')
-      .pipe(concat('heatmap.min.js'))
-    //   .pipe(uglify())
-      .pipe(gulp.dest('build'));
+    return gulp.src('src/final.js')
+        .pipe(concat('heatmap.min.js'))
+        //   .pipe(uglify())
+        .pipe(gulp.dest('build'));
 });
 
 
