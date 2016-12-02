@@ -1,3 +1,6 @@
+/// <reference path="../typings/index.d.ts" />
+
+
 namespace wd3 {
 
     interface opts {
@@ -97,32 +100,37 @@ namespace wd3 {
             // this.context.globalAlpha = 1.0;
             // for (i = _n = 0, _ref5 = this.background.height; 0 <= _ref5 ? _n <= _ref5 : _n >= _ref5; i = 0 <= _ref5 ? ++_n : --_n) {
             // value = viewsArray[i] / maxViews;
-            var maxHeight = 0;
-            var maxTimes = 0;
-            var maxTimeIntervale = 0;
-            this.positionData.forEach((value, index) => {
-                if (maxHeight < value[EPixel.rowPx]) {
-                    maxHeight = value[EPixel.rowPx];
-                }
-                if (maxTimes < value[EPixel.times]) {
-                    maxTimes = value[EPixel.times];
-                }
-                if (maxTimeIntervale < value[EPixel.timeInterval]) {
-                    maxTimeIntervale = value[EPixel.timeInterval];
-                }
 
+            d3.json("../example/data.json", (data) => {
+                var maxHeight = 0;
+                var maxTimes = 0;
+                var maxTimeIntervale = 0;
+                data.forEach((value, index) => {
+                    if (maxHeight < value[EPixel.rowPx]) {
+                        maxHeight = value[EPixel.rowPx];
+                    }
+                    if (maxTimes < value[EPixel.times]) {
+                        maxTimes = value[EPixel.times];
+                    }
+                    if (maxTimeIntervale < value[EPixel.timeInterval]) {
+                        maxTimeIntervale = value[EPixel.timeInterval];
+                    }
+
+                });
+
+                for (var i = 0; i < maxHeight; i++) {
+                    var value = data[i][EPixel.times] / maxTimes;
+                    this.context.beginPath();
+                    this.context.moveTo(0, i);
+                    this.context.lineTo(this.background.width, i);
+                    this.context.lineWidth = 1;
+                    this.context.strokeStyle = this.calculateColor(value);
+                    this.context.stroke();
+
+                }
             });
 
-            for (var i = 0; i < maxHeight; i++) {
-                var value = this.positionData[i][EPixel.times] / maxTimes;
-                this.context.beginPath();
-                this.context.moveTo(0, i);
-                this.context.lineTo(this.background.width, i);
-                this.context.lineWidth = 1;
-                this.context.strokeStyle = this.calculateColor(value);
-                this.context.stroke();
 
-            }
 
 
             // }

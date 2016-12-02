@@ -1,0 +1,21 @@
+{
+  "name": "heatmap",
+  "description": "Library for 2 dimensional heatmap indicating scroll view",
+  "main": "Gruntfile.js",
+  "authors": [
+    "Yuichiro NAKAGAWA <ii.hsif.drows@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/wangyibu/ViewHeatmap.js",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "*"
+  }
+}
