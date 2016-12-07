@@ -21,3 +21,4 @@ function draw() {
     ctx.fill();
     // ctx.fillRect(0,0, 140,140);
 }
+//# sourceMappingURL=linearGradient.js.map

@@ -1,4 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
 var wd3;
 (function (wd3) {
     (function (EPixel) {
@@ -78,15 +77,19 @@ var wd3;
                         maxTimeIntervale = value[EPixel.timeInterval];
                     }
                 });
+                var gradient = _this.context.createLinearGradient(0, 0, _this.background.width, _this.background.height);
                 for (var i = 0; i < maxHeight; i++) {
-                    var value = data[i][EPixel.times] / maxTimes;
-                    _this.context.beginPath();
-                    _this.context.moveTo(0, i);
-                    _this.context.lineTo(_this.background.width, i);
-                    _this.context.lineWidth = 1;
-                    _this.context.strokeStyle = _this.calculateColor(value);
-                    _this.context.stroke();
+                    var value = data[i][EPixel.timeInterval] / maxTimeIntervale;
+                    // this.context.beginPath();
+                    // this.context.moveTo(0, i);
+                    // this.context.lineTo(this.background.width, i);
+                    // this.context.lineWidth = 1;
+                    // this.context.strokeStyle = this.calculateColor(value);
+                    // this.context.stroke();
+                    gradient.addColorStop(value, _this.calculateColor(value));
                 }
+                _this.context.fillStyle = gradient;
+                _this.context.fillRect(0, 0, _this.background.width, _this.background.height);
             });
             // }
             // console.log(viewsArray);
@@ -105,3 +108,4 @@ var wd3;
     }());
     wd3.Heatmap = Heatmap;
 })(wd3 || (wd3 = {}));
+//# sourceMappingURL=final.js.map

@@ -1,6 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
-
 namespace wd3 {
 
     interface opts {
@@ -10,9 +7,9 @@ namespace wd3 {
     }
 
     export enum EPixel {
-        rowPx,
-        times,
-        timeInterval
+        rowPx = 0,
+        times = 1,
+        timeInterval = 2
     }
 
     interface IData {
@@ -100,7 +97,6 @@ namespace wd3 {
             // this.context.globalAlpha = 1.0;
             // for (i = _n = 0, _ref5 = this.background.height; 0 <= _ref5 ? _n <= _ref5 : _n >= _ref5; i = 0 <= _ref5 ? ++_n : --_n) {
             // value = viewsArray[i] / maxViews;
-
             d3.json("../example/data.json", (data) => {
                 var maxHeight = 0;
                 var maxTimes = 0;
@@ -117,17 +113,20 @@ namespace wd3 {
                     }
 
                 });
-
+                var gradient = this.context.createLinearGradient(0, 0, this.background.width, this.background.height);
                 for (var i = 0; i < maxHeight; i++) {
-                    var value = data[i][EPixel.times] / maxTimes;
-                    this.context.beginPath();
-                    this.context.moveTo(0, i);
-                    this.context.lineTo(this.background.width, i);
-                    this.context.lineWidth = 1;
-                    this.context.strokeStyle = this.calculateColor(value);
-                    this.context.stroke();
-
+                    var value = data[i][EPixel.timeInterval] / maxTimeIntervale;
+                    // this.context.beginPath();
+                    // this.context.moveTo(0, i);
+                    // this.context.lineTo(this.background.width, i);
+                    // this.context.lineWidth = 1;
+                    // this.context.strokeStyle = this.calculateColor(value);
+                    // this.context.stroke();
+                    gradient.addColorStop(value, this.calculateColor(value));
                 }
+                this.context.fillStyle = gradient;
+                this.context.fillRect(0, 0, this.background.width, this.background.height);
+
             });
 
 

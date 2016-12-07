@@ -1,11 +1,9 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "target": "es5",
-        "noImplicitAny": false,
-        "sourceMap": false,
-        "typeRoots": [
-            "./typings"
+        "sourceMap": true,
+        "types": [
+            "d3"
         ]
     }
 }

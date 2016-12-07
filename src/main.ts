@@ -100,6 +100,8 @@ namespace wd3 {
                     ++this.minus[position + data.height];
                 }
             }
+
+
             views = 0;
             maxViews = 0;
             viewsArray = [];
@@ -110,15 +112,23 @@ namespace wd3 {
                 maxViews = Math.max(maxViews, views);
             }
             this.context.globalAlpha = 1.0;
+            var gradient = this.context.createLinearGradient(0, 0, this.background.width, this.background.height);
             for (i = _n = 0, _ref5 = this.background.height; 0 <= _ref5 ? _n <= _ref5 : _n >= _ref5; i = 0 <= _ref5 ? ++_n : --_n) {
                 value = viewsArray[i] / maxViews;
-                this.context.beginPath();
-                this.context.moveTo(0, i);
-                this.context.lineTo(this.background.width, i);
-                this.context.lineWidth = 1;
-                this.context.strokeStyle = this.calculateColor(value);
-                this.context.stroke();
+                // this.context.beginPath();
+                // this.context.moveTo(0, i);
+                // this.context.lineTo(this.background.width, i);
+                // this.context.lineWidth = 1;
+                // this.context.strokeStyle = this.calculateColor(value);
+                // this.context.stroke();
+
+                gradient.addColorStop(parseFloat(value), this.calculateColor(value));
             }
+            this.context.fillStyle = gradient;
+            this.context.fillRect(0, 0, this.background.width, this.background.height);
+
+
+
             console.log(viewsArray);
             console.log(maxViews);
             console.log(views);
