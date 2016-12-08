@@ -7,6 +7,7 @@
   "repository": "https://github.com/Mekajiki/ViewHeatmap.js",
   "license": "MIT",
   "devDependencies": {
+    "@types/angular": "^1.5.20",
     "@types/d3": "^4.4.0",
     "grunt-contrib-watch": "^0.6.1"
   },

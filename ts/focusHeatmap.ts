@@ -6,6 +6,11 @@ namespace wd3 {
         colorScheme: string;
     }
 
+    export enum EPixel {
+        rowPx = 0,
+        times = 1,
+        timeInterval = 2
+    }
 
     interface IData {
         height: number;
@@ -17,7 +22,7 @@ namespace wd3 {
         simpleRedGradient(value: number): string;
     }
 
-    export class HeatmapOld implements IHeatmap {
+    export class Heatmap implements IHeatmap {
         public screenshotOpacity: number;
         public heatmapOpacity: number;
         public calculateColor;
@@ -28,7 +33,7 @@ namespace wd3 {
         public plus: any;
         public minus: any;
         public heatmapContainer: HTMLElement;
-        private positionData: Array<[number, number, number]>;
+        private positionData: IData[];
 
 
         init() {
@@ -43,56 +48,98 @@ namespace wd3 {
 
         }
 
-        constructor(private tankClassName: string,
+        constructor(
+            private tankClassName: string,
             screenshotUrl: string,
-            positionData: Array<[number, number, number]>,
-            opts: opts = { screenshotAlpha: 0.6, heatmapAlpha: 0.6, colorScheme: 'simple' }) {
+            positionData: IData[],
+            opts: opts = { screenshotAlpha: 0.6, heatmapAlpha: 0.6, colorScheme: 'simple' }
+        ) {
             this.init();
             this.positionData = positionData;
             this.screenshotOpacity = opts.screenshotAlpha;
             this.heatmapOpacity = opts.heatmapAlpha;
             this.calculateColor = opts.colorScheme == 'simple' ? this.fiveColorGradient : this.simpleRedGradient;
-            this.background.src = screenshotUrl;
-            this.background.onload = () => {
-                this.canvas.width = this.background.width;
-                this.canvas.height = this.background.height;
-                this.canvas.style.width = this.background.width + 'px';
-                this.canvas.style.height = this.background.height + 'px';
-                this.canvas.style.position = 'absolute';
-                this.canvas.style.top = "0";
-                this.canvas.style.left = "0";
+            if (screenshotUrl) {
+                this.background.src = screenshotUrl;
+                this.background.onload = () => {
 
 
-                // this.context.drawImage(this.background, 0, 0);
-                this.compute();
+                    this.context.drawImage(this.background, 0, 0);
+                }
+                this.background.onerror = () => {
+                    console.log('image error');
+                }
             }
-            this.background.onerror = () => {
-                console.log('image error');
-            }
+            this.canvas.width = this.background.width;
+            this.canvas.height = this.background.height;
+            this.canvas.style.width = this.background.width + 'px';
+            this.canvas.style.height = this.background.height + 'px';
+            this.canvas.style.position = 'absolute';
+            this.canvas.style.top = "0";
+            this.canvas.style.left = "0";
+            this.compute();
         }
 
         // 
         compute() {
-            // // 创建高度数组
+            // 创建高度数组
             // var data, i, maxViews, position, value, views, viewsArray,
             //     _i, _j, _k, _l, _len, _len1, _m, _n,
             //     _ref, _ref2, _ref3, _ref4, _ref5;
 
+            // function createHeightPixelArray() {
+            //     var _results = [];
+            //     for (var _i = 0, _ref = this.background.height; 0 <= _ref ? _i <= _ref : _i >= _ref; 0 <= _ref ? _i++ : _i--) {
+            //         _results.push(_i);
+            //     }
+            //     return _results;
+            // }
+            // this.plus = createHeightPixelArray.call(this).map(function () {
+            //     return 0;
+            // });
+            // this.minus = createHeightPixelArray.call(this).map(function () {
+            //     return 0;
+            // })
+            // _ref2 = this.positionData;
+            // for (_k = 0, _len = _ref2.length; _k < _len; _k++) {
+            //     data = this.positionData[_k];
+            //     _ref3 = data.positions;
+            //     for (_l = 0, _len1 = _ref3.length; _l < _len1; _l++) {
+            //         position = _ref3[_l];
+            //         ++this.plus[position];
+            //         ++this.minus[position + data.height];
+            //     }
+            // }
 
 
             // views = 0;
             // maxViews = 0;
             // viewsArray = [];
-            // for (i = _m = 0, _ref4 = this.positionData[this.positionData.length - 1][EPixel.rowPx]; 0 <= _ref4 ? _m <= _ref4 : _m >= _ref4; i = 0 <= _ref4 ? ++_m : --_m) {
+            // for (i = _m = 0, _ref4 = this.background.height; 0 <= _ref4 ? _m <= _ref4 : _m >= _ref4; i = 0 <= _ref4 ? ++_m : --_m) {
             //     views += this.plus[i];
             //     views -= this.minus[i];
             //     viewsArray[i] = views;
             //     maxViews = Math.max(maxViews, views);
             // }
             // this.context.globalAlpha = 1.0;
+            // var gradient = this.context.createLinearGradient(0, 0, this.background.width, this.background.height);
             // for (i = _n = 0, _ref5 = this.background.height; 0 <= _ref5 ? _n <= _ref5 : _n >= _ref5; i = 0 <= _ref5 ? ++_n : --_n) {
-            // value = viewsArray[i] / maxViews;
-            d3.json("../example/data.json", (data) => {
+            //     value = viewsArray[i] / maxViews;
+            //     // this.context.beginPath();
+            //     // this.context.moveTo(0, i);
+            //     // this.context.lineTo(this.background.width, i);
+            //     // this.context.lineWidth = 1;
+            //     // this.context.strokeStyle = this.calculateColor(value);
+            //     // this.context.stroke();
+
+            //     gradient.addColorStop(parseFloat(value), this.calculateColor(value));
+            // }
+            // this.context.fillStyle = gradient;
+            // this.context.fillRect(0, 0, this.background.width, this.background.height);
+            // console.log(viewsArray);
+            // console.log(maxViews);
+            // console.log(views);
+            d3.json("dataSource/data.json", (data) => {
                 var maxHeight = 0;
                 var maxTimes = 0;
                 var maxTimeIntervale = 0;
@@ -124,15 +171,7 @@ namespace wd3 {
 
             });
 
-
-
-
-            // }
-            // console.log(viewsArray);
-            // console.log(maxViews);
-            // console.log(views);
         }
-
 
         fiveColorGradient(value: number): string {
             var h;
