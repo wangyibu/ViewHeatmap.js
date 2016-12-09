@@ -40,7 +40,7 @@ namespace wd3 {
             this.heatmapContainer.style.width = "100%";
             this.heatmapContainer.style.height = "100%";
             this.heatmapContainer.appendChild(this.canvas);
-
+            console.log(EProfileType.mobile);
         }
 
         constructor(private tankClassName: string,

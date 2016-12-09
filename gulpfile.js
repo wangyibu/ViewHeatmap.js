@@ -9,14 +9,14 @@ var uglify = require('gulp-uglify');
 //         .pipe(gulp.dest('dir2/'));
 // });
 
-gulp.task('jsConcat', function() {
-    return gulp.src('src/final.js')
-        .pipe(concat('heatmap.min.js'))
+gulp.task('jsConcat', function () {
+    return gulp.src('build/focusHeatmap.js')
+        .pipe(concat('focusHeatmap.min.js'))
         //   .pipe(uglify())
         .pipe(gulp.dest('build'));
 });
 
 
-gulp.task('watch_src', function() {
-    gulp.watch('src/**/*.js', ['jsConcat']);
+gulp.task('watch_src', function () {
+    gulp.watch('build/focusHeatmap.js', ['jsConcat']);
 });

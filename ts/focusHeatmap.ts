@@ -12,6 +12,11 @@ namespace wd3 {
         timeInterval = 2
     }
 
+    export enum EProfileType {
+        web = <any>"web",
+        mobile = <any>"mobile"
+    }
+
     interface IData {
         height: number;
         positions: Array<number>;
@@ -45,7 +50,7 @@ namespace wd3 {
             this.heatmapContainer.style.width = "100%";
             this.heatmapContainer.style.height = "100%";
             this.heatmapContainer.appendChild(this.canvas);
-
+            console.log(EProfileType.mobile);
         }
 
         constructor(
